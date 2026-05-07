@@ -43,7 +43,8 @@ Body:
 {
   "name": "John Doe",
   "email": "john@example.com",
-  "password": "password123"
+  "password": "password123",
+  "role": "patient"
 }
 ```
 

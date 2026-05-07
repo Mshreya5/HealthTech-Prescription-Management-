@@ -15,20 +15,16 @@ class PrescriptionModel {
     }
 
     static async update(id, doctorId, medication, dosage, notes) {
-        try {
-            const result = await db.run(
-                'UPDATE prescriptions SET medication = ?, dosage = ?, notes = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND doctor_id = ?',
-                [medication, dosage, notes || '', id, doctorId]
-            );
+        const result = await db.run(
+            'UPDATE prescriptions SET medication = ?, dosage = ?, notes = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND doctor_id = ?',
+            [medication, dosage, notes || '', id, doctorId]
+        );
 
-            if (result.changes === 0) {
-                throw new Error('Prescription not found or unauthorized');
-            }
-
-            return { id, medication, dosage, notes };
-        } catch (error) {
-            throw new Error('Error updating prescription: ' + error.message);
+        if (result.changes === 0) {
+            throw new Error('Prescription not found or unauthorized');
         }
+
+        return { id, medication, dosage, notes };
     }
 
     static async findById(id) {

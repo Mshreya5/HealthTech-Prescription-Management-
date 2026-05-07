@@ -47,7 +47,7 @@ class AuthController {
 
             res.status(201).json({
                 success: true,
-                message: 'Patient registered successfully.',
+                message: `${role.charAt(0).toUpperCase() + role.slice(1)} registered successfully.`,
                 data: {
                     user: {
                         id: user.id,
