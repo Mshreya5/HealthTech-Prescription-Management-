@@ -1,6 +1,6 @@
 # HealthTech Prescription Management System
 
-A simple backend system for managing prescriptions with user login.
+A backend system for managing prescriptions with user authentication and role-based authorization, built with Node.js, Express.js, and SQLite3 following MVC architecture.
 
 ## How to Run
 
@@ -27,12 +27,12 @@ A simple backend system for managing prescriptions with user login.
 ## Notes
 
 - No sample users are preloaded.
-- Use `POST /auth/register` to create a new patient.
+- Use `POST /auth/register` to create a new user (doctor or patient).
 - Use `POST /auth/login` to sign in after registration.
 
 ## Postman Examples
 
-### 1. Register New Patient
+### 1. Register New User (Doctor or Patient)
 ```
 Method: POST
 URL: http://localhost:3000/auth/register
@@ -48,7 +48,7 @@ Body:
 }
 ```
 
-### 2. Login as Doctor
+### 2. Login
 ```
 Method: POST
 URL: http://localhost:3000/auth/login
@@ -70,7 +70,7 @@ Method: POST
 URL: http://localhost:3000/prescriptions/create
 Headers:
   Content-Type: application/json
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  Authorization: Bearer <token>
 
 Body:
 {
@@ -87,7 +87,7 @@ Method: PUT
 URL: http://localhost:3000/prescriptions/update/1
 Headers:
   Content-Type: application/json
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  Authorization: Bearer <token>
 
 Body:
 {
@@ -97,28 +97,37 @@ Body:
 }
 ```
 
-### 5. Get Doctor's Prescriptions (Doctor Only)
+### 5. Delete Prescription (Doctor Only)
+```
+Method: DELETE
+URL: http://localhost:3000/prescriptions/delete/1
+Headers:
+  Authorization: Bearer <token>
+```
+
+### 6. Get Doctor's Prescriptions (Doctor Only)
 ```
 Method: GET
 URL: http://localhost:3000/prescriptions/doctor
 Headers:
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  Authorization: Bearer <token>
 ```
 
-### 6. Get Patient's Prescriptions (Patient Only)
+### 7. Get Patient's Prescriptions (Patient Only)
 ```
 Method: GET
 URL: http://localhost:3000/prescriptions/patient
 Headers:
-  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  Authorization: Bearer <token>
 ```
 
 ## API Endpoints
 
-- `POST /auth/register` - Register patient
-- `POST /auth/login` - Login (doctor/patient)
+- `POST /auth/register` - Register user (doctor or patient)
+- `POST /auth/login` - Login
 - `POST /prescriptions/create` - Create prescription (doctor only)
 - `PUT /prescriptions/update/:id` - Update prescription (doctor only)
+- `DELETE /prescriptions/delete/:id` - Delete prescription (doctor only)
 - `GET /prescriptions/doctor` - Get doctor's prescriptions (doctor only)
 - `GET /prescriptions/patient` - Get patient's prescriptions (patient only)
 
@@ -132,10 +141,36 @@ Headers:
 
 ## Features
 
-- User registration and login
+- User registration and login (doctor & patient)
 - JWT token authentication
-- Role-based access (doctor/patient)
-- Prescription CRUD operations
-- SQLite database
-- Password hashing
-- Input validation
+- Role-based access control (doctor/patient)
+- Full prescription CRUD operations
+- SQLite database with relational schema
+- Password hashing with bcryptjs
+- Input validation and error handling
+- Protected routes with middleware
+- MVC architecture
+
+## Project Structure
+
+```
+healthtech/
+├── app.js
+├── config/
+│   └── db.js
+├── controllers/
+│   ├── authController.js
+│   └── prescriptionController.js
+├── middleware/
+│   ├── authMiddleware.js
+│   └── roleMiddleware.js
+├── models/
+│   ├── userModel.js
+│   └── prescriptionModel.js
+├── routes/
+│   ├── authRoutes.js
+│   └── prescriptionRoutes.js
+└── database/
+    ├── schema.sql
+    └── queries.sql
+```

@@ -39,6 +39,29 @@ class PrescriptionController {
         }
     }
 
+    static async delete(req, res) {
+        try {
+            const { id } = req.params;
+            const doctorId = req.user.id;
+
+            const existing = await PrescriptionModel.findById(id);
+            if (!existing) {
+                return res.status(404).json({ success: false, message: 'Prescription not found.' });
+            }
+
+            if (existing.doctor_id !== doctorId) {
+                return res.status(403).json({ success: false, message: 'Access denied. You can only delete your own prescriptions.' });
+            }
+
+            await PrescriptionModel.delete(id, doctorId);
+            res.json({ success: true, message: 'Prescription deleted successfully.' });
+
+        } catch (error) {
+            console.error('Delete prescription error:', error);
+            res.status(500).json({ success: false, message: 'Internal server error.' });
+        }
+    }
+
     static async update(req, res) {
         try {
             const { id } = req.params;

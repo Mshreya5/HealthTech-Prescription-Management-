@@ -70,6 +70,17 @@ class PrescriptionModel {
             throw new Error('Error finding prescriptions: ' + error.message);
         }
     }
+
+    static async delete(id, doctorId) {
+        const result = await db.run(
+            'DELETE FROM prescriptions WHERE id = ? AND doctor_id = ?',
+            [id, doctorId]
+        );
+        if (result.changes === 0) {
+            throw new Error('Prescription not found or unauthorized');
+        }
+        return true;
+    }
 }
 
 module.exports = PrescriptionModel;

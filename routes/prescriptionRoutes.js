@@ -9,6 +9,7 @@ router.use(authMiddleware);
 
 router.post('/create', roleMiddleware('doctor'), PrescriptionController.create);
 router.put('/update/:id', roleMiddleware('doctor'), PrescriptionController.update);
+router.delete('/delete/:id', roleMiddleware('doctor'), PrescriptionController.delete);
 router.get('/doctor', roleMiddleware('doctor'), PrescriptionController.getDoctorPrescriptions);
 router.get('/patient', roleMiddleware('patient'), PrescriptionController.getPatientPrescriptions);
 
